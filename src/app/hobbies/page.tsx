@@ -73,14 +73,14 @@ const otherInterests = [
   },
 ];
 
-// Photography gallery - replace with your actual photos
+// Photography gallery
 const photographyGallery = [
-  { src: "/images/gallery/photo1.jpg", caption: "Sunset in Barcelona" },
-  { src: "/images/gallery/photo2.jpg", caption: "Street photography" },
-  { src: "/images/gallery/photo3.jpg", caption: "Mountain trek" },
-  { src: "/images/gallery/photo4.jpg", caption: "City lights" },
-  { src: "/images/gallery/photo5.jpg", caption: "Nature escape" },
-  { src: "/images/gallery/photo6.jpg", caption: "Urban exploration" },
+  { src: "/images/gallery/photo1.jpg", caption: "Gokarna beach vibes" },
+  { src: "/images/gallery/photo2.jpg", caption: "Gokarna sunset" },
+  { src: "/images/gallery/photo3.jpg", caption: "Thailand adventures" },
+  { src: "/images/gallery/photo4.jpg", caption: "Thailand memories" },
+  { src: "/images/gallery/photo5.jpg", caption: "Varkala cliffs" },
+  { src: "/images/gallery/photo6.jpg", caption: "Ooty hills" },
 ];
 
 export default function HobbiesPage() {
@@ -187,6 +187,33 @@ export default function HobbiesPage() {
                   </motion.div>
                 ))}
               </div>
+
+              {/* GOAT Section with Messi Image */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+                className="mt-8 bg-card border border-border rounded-xl overflow-hidden"
+              >
+                <div className="flex flex-col md:flex-row">
+                  <div className="md:w-1/3 h-48 md:h-auto relative">
+                    <img
+                      src="/images/messi.jpg"
+                      alt="Messi - The GOAT"
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent to-card md:bg-gradient-to-t md:from-transparent md:to-transparent" />
+                  </div>
+                  <div className="p-6 md:w-2/3 flex flex-col justify-center">
+                    <p className="text-sm text-muted-foreground mb-2">The GOAT 🐐</p>
+                    <h3 className="text-xl font-bold mb-2">Lionel Messi</h3>
+                    <p className="text-muted-foreground">
+                      The greatest footballer of all time. His vision, dribbling, and 8 Ballon d&apos;Ors speak for themselves.
+                      Watching him play for Barcelona was pure magic.
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
 
               {/* Hot Take Banner */}
               <motion.div
