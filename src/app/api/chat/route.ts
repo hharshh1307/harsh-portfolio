@@ -145,8 +145,6 @@ export async function POST(req: Request) {
       model: openai("gpt-4o-mini"),
       system: systemPrompt,
       messages,
-      maxTokens: 500,
-      temperature: 0.7,
     });
 
     return result.toTextStreamResponse();
