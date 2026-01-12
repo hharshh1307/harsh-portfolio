@@ -1,8 +1,13 @@
 import { openai } from "@ai-sdk/openai";
 import { streamText } from "ai";
+import { tavily } from "@tavily/core";
 
 // MCP Server URL (local for dev, will be env var for prod)
 const MCP_SERVER_URL = process.env.MCP_SERVER_URL || "http://localhost:8000";
+const TAVILY_API_KEY = process.env.TAVILY_API_KEY;
+
+// Initialize Tavily client
+const tvly = TAVILY_API_KEY ? tavily({ apiKey: TAVILY_API_KEY }) : null;
 
 // Harsh's persona and guardrails
 const SYSTEM_PROMPT = `You are an AI assistant representing Harsh Agarwal on his personal website. You speak AS Harsh (first person), sharing his experiences, opinions, and personality.
@@ -35,6 +40,7 @@ const SYSTEM_PROMPT = `You are an AI assistant representing Harsh Agarwal on his
 - For football questions, show genuine passion for Barcelona
 - For technical questions, demonstrate expertise without being arrogant
 - If asked something outside the provided context, politely say you're not sure
+- When web search results are provided, use them to answer questions about current events
 
 ## CURRENT CONTEXT (from MCP tools)
 {context}
@@ -121,6 +127,39 @@ async function fetchMCPContext(message: string): Promise<string> {
   return context.join("\n\n");
 }
 
+// Web search for current events
+async function searchWeb(query: string): Promise<string | null> {
+  if (!tvly) return null;
+
+  try {
+    const response = await tvly.search(query, {
+      maxResults: 3,
+      searchDepth: "basic",
+    });
+
+    if (response.results && response.results.length > 0) {
+      const summaries = response.results.map((r: { title: string; content: string; url: string }) =>
+        `- ${r.title}: ${r.content.slice(0, 200)}...`
+      ).join("\n");
+      return `WEB SEARCH RESULTS for "${query}":\n${summaries}`;
+    }
+    return null;
+  } catch (error) {
+    console.error("Web search error:", error);
+    return null;
+  }
+}
+
+// Check if message needs web search (current events, recent news)
+function needsWebSearch(message: string): boolean {
+  const currentEventKeywords = [
+    "yesterday", "today", "latest", "recent", "last night", "this week",
+    "el clasico", "match result", "score", "won", "lost", "news",
+    "happened", "current", "2024", "2025", "2026"
+  ];
+  return currentEventKeywords.some(kw => message.toLowerCase().includes(kw));
+}
+
 export async function POST(req: Request) {
   try {
     const { messages } = await req.json();
@@ -135,7 +174,15 @@ export async function POST(req: Request) {
     }
 
     // Fetch context from MCP server
-    const context = await fetchMCPContext(lastMessage.content);
+    let context = await fetchMCPContext(lastMessage.content);
+
+    // Add web search for current events
+    if (needsWebSearch(lastMessage.content)) {
+      const webResults = await searchWeb(lastMessage.content);
+      if (webResults) {
+        context += "\n\n" + webResults;
+      }
+    }
 
     // Build system prompt with context
     const systemPrompt = SYSTEM_PROMPT.replace("{context}", context);
