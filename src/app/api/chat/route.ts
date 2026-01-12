@@ -4,10 +4,16 @@ import { tavily } from "@tavily/core";
 
 // MCP Server URL (local for dev, will be env var for prod)
 const MCP_SERVER_URL = process.env.MCP_SERVER_URL || "http://localhost:8000";
-const TAVILY_API_KEY = process.env.TAVILY_API_KEY;
 
-// Initialize Tavily client
-const tvly = TAVILY_API_KEY ? tavily({ apiKey: TAVILY_API_KEY }) : null;
+// Lazy initialize Tavily client (env vars may not be available at module load in serverless)
+function getTavilyClient() {
+  const apiKey = process.env.TAVILY_API_KEY;
+  if (!apiKey) {
+    console.log("TAVILY_API_KEY not configured");
+    return null;
+  }
+  return tavily({ apiKey });
+}
 
 // Harsh's persona and guardrails
 const SYSTEM_PROMPT = `You are an AI assistant representing Harsh Agarwal on his personal website. You speak AS Harsh (first person), sharing his experiences, opinions, and personality.
@@ -129,6 +135,7 @@ async function fetchMCPContext(message: string): Promise<string> {
 
 // Web search for current events
 async function searchWeb(query: string): Promise<string | null> {
+  const tvly = getTavilyClient();
   if (!tvly) return null;
 
   try {
