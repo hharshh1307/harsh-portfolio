@@ -8,9 +8,9 @@ export const personalInfo = {
   bio: "Data Scientist with 2.5+ years of experience building ML systems at scale. Currently at Newme, previously at Zomato. IIT Delhi graduate passionate about recommendation systems, deep learning, and solving real-world problems with data.",
   email: "harshh1307@gmail.com",
   phone: "+91-7414890202",
-  github: "https://github.com/harsh",
-  linkedin: "https://linkedin.com/in/harshagarwal",
-  twitter: "https://twitter.com/harsh",
+  github: "https://github.com/hharshh1307",
+  linkedin: "https://www.linkedin.com/in/harsh-agarwal-7a072b19a/",
+  twitter: "https://x.com/harshag76504161",
 };
 
 export const stats = {
