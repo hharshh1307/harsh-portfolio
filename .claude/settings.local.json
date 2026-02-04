@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx create-next-app:*)",
+      "Bash(node --version:*)",
+      "Bash(npm:*)",
+      "Bash(export PATH=\"/opt/homebrew/bin:/usr/local/bin:$PATH\")",
+      "Bash(brew --prefix:*)",
+      "Bash(/opt/homebrew/bin/brew install:*)",
+      "Bash(curl:*)",
+      "Bash(pip3 install:*)",
+      "Bash(python3 -m uvicorn:*)",
+      "Bash(python3:*)",
+      "Bash(__NEW_LINE_ff4aece01a9fe832__ echo -e \"\\\\n=== Testing consult_football_brain ===\")",
+      "Bash(__NEW_LINE_7054a1b5bd86e963__ echo -e \"\\\\n=== Testing query_resume_sql ===\")",
+      "Bash(__NEW_LINE_f81a4e6268722579__ echo -e \"\\\\n=== Testing skills endpoint ===\")",
+      "Bash(lsof:*)",
+      "Bash(xargs:*)",
+      "Bash(git remote add:*)",
+      "mcp__hugging-face__hf_doc_search",
+      "Bash(SUPABASE_ACCESS_TOKEN=\"sbp_0959adf375706e2f620813af13914bca323bbe87\" ~/.local/bin/supabase functions deploy:*)",
+      "Bash(ls:*)",
+      "Bash(git -C /Users/naina07ag/projects/PocketMind/PocketMind log --oneline)",
+      "Bash(xcodebuild -list:*)",
+      "Bash(npx tsx:*)",
+      "Bash(npx create-next-app@latest:*)"
+    ]
+  }
+}
