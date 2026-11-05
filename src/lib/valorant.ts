@@ -1,4 +1,5 @@
 import "server-only";
+import { unstable_cache } from "next/cache";
 
 /**
  * Live Valorant stats via the community HenrikDev API (https://docs.henrikdev.xyz).
@@ -35,11 +36,13 @@ const BASE = "https://api.henrikdev.xyz";
 
 function config() {
   const key = process.env.HENRIK_API_KEY;
-  const riotId = process.env.VALORANT_RIOT_ID;
-  const region = process.env.VALORANT_REGION ?? "ap";
-  if (!key || !riotId || !riotId.includes("#")) return null;
-  const [name, tag] = riotId.split("#");
-  return { key, riotId, region, name: encodeURIComponent(name), tag: encodeURIComponent(tag) };
+  const region = (process.env.VALORANT_REGION ?? "ap").trim().toLowerCase();
+  const [rawName, rawTag] = (process.env.VALORANT_RIOT_ID ?? "").split("#");
+  const name = rawName?.trim();
+  const tag = rawTag?.trim();
+  if (!key || !name || !tag) return null;
+  const riotId = `${name}#${tag}`;
+  return { key: key.trim(), riotId, region, name: encodeURIComponent(name), tag: encodeURIComponent(tag) };
 }
 
 export const valorantConfigured = () => config() !== null;
@@ -48,7 +51,9 @@ async function henrik<T>(path: string, key: string): Promise<T | null> {
   try {
     const res = await fetch(`${BASE}${path}`, {
       headers: { Authorization: key, Accept: "application/json" },
-      next: { revalidate: 600 },
+      // Raw match payloads are several MB (over Next's 2MB fetch-cache limit), so the
+      // small derived result is cached instead; see getValorantLive below.
+      cache: "no-store",
     });
     if (!res.ok) return null;
     return (await res.json()) as T;
@@ -78,15 +83,16 @@ type MatchesV4 = {
   }[];
 };
 
-export async function getValorantLive(): Promise<ValorantLive | null> {
+async function fetchValorantLive(): Promise<ValorantLive> {
   const c = config();
-  if (!c) return null;
+  if (!c) throw new Error("Valorant not configured");
 
   const [mmr, matches] = await Promise.all([
     henrik<MmrV3>(`/valorant/v3/mmr/${c.region}/pc/${c.name}/${c.tag}`, c.key),
     henrik<MatchesV4>(`/valorant/v4/matches/${c.region}/pc/${c.name}/${c.tag}?size=10`, c.key),
   ]);
-  if (!mmr && !matches) return null;
+  // Throwing (rather than returning null) keeps failures out of the cache.
+  if (!mmr && !matches) throw new Error("HenrikDev unavailable");
 
   const me = (p: { name?: string; tag?: string }) =>
     p.name?.toLowerCase() === decodeURIComponent(c.name).toLowerCase() &&
@@ -127,4 +133,15 @@ export async function getValorantLive(): Promise<ValorantLive | null> {
       losses: recent.filter((m) => m.won === false).length,
     },
   };
+}
+
+/** Cached for 10 minutes per Riot ID, so page views and agent calls share one upstream fetch. */
+export async function getValorantLive(): Promise<ValorantLive | null> {
+  const c = config();
+  if (!c) return null;
+  try {
+    return await unstable_cache(fetchValorantLive, ["valorant-live", c.riotId, c.region], { revalidate: 600 })();
+  } catch {
+    return null;
+  }
 }

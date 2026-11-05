@@ -4,15 +4,25 @@
  *
  * 1. developer.spotify.com/dashboard → your app → Settings → Redirect URIs → add
  *      http://127.0.0.1:8888/callback
- * 2. SPOTIFY_CLIENT_ID=... SPOTIFY_CLIENT_SECRET=... node scripts/spotify-auth.mjs
+ * 2. Put SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET in .env.local (or the shell), then
+ *      node scripts/spotify-auth.mjs
  * 3. Open the printed URL, approve, copy the refresh token into Vercel as SPOTIFY_REFRESH_TOKEN.
  */
 import http from "node:http";
 import crypto from "node:crypto";
 
+try {
+  process.loadEnvFile(".env.local");
+} catch {
+  // no .env.local; fall back to the shell environment
+}
+
 const { SPOTIFY_CLIENT_ID: id, SPOTIFY_CLIENT_SECRET: secret } = process.env;
 if (!id || !secret) {
-  console.error("Set SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET first.");
+  console.error(
+    "Set SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET in .env.local first.\n" +
+      "Get them at developer.spotify.com/dashboard → Create app → Settings.",
+  );
   process.exit(1);
 }
 
