@@ -5,8 +5,14 @@
   "location": "Bengaluru, India",
   "currentRole": "Data Scientist",
   "currentCompany": "Newme",
+  "summary": "Data scientist in Bengaluru. Off the clock it's Barça, Valorant, coffee and the next trip.",
+  "focusAreas": [
+    "Recommendation systems",
+    "Demand forecasting",
+    "Fraud detection"
+  ],
   "intro": [
-    "I'm a data scientist at Newme in Bengaluru, working on ranking and recommendations. Before that I spent two years at Zomato building recommendation, churn and growth models for the dining business.",
+    "I'm a data scientist at Newme in Bengaluru. Before that I was at Zomato for two years.",
     "I studied Electrical Engineering at IIT Delhi.",
     "Outside work: Barcelona, Valorant, coffee, and trips I keep promising to write up properly."
   ],

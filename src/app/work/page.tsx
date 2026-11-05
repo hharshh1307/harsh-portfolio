@@ -3,7 +3,6 @@ import { profile, work } from "@/lib/content";
 import { duration, formatMonth, formatRange } from "@/lib/format";
 import { PageIntro } from "@/components/ui/Chapter";
 import { Reveal } from "@/components/ui/Reveal";
-import { ProjectRows } from "@/components/work/ProjectRows";
 import { AskButton } from "@/components/chat/AskButton";
 
 export const metadata: Metadata = {
@@ -14,16 +13,14 @@ export const metadata: Metadata = {
 export default function WorkPage() {
   return (
     <>
-      <PageIntro kicker="Work" title={<>Recommendations, ranking, and the occasional fraud model.</>}>
+      <PageIntro kicker="Work" title={<>What I do between nine and six.</>}>
         {profile.intro.slice(0, 2).map((p) => (
           <p key={p} className="mt-3 first:mt-0">
             {p}
           </p>
         ))}
         <div className="mt-6 flex flex-wrap gap-3">
-          <AskButton question="Summarise your work experience for a recruiter, with the numbers.">
-            Get a recruiter summary
-          </AskButton>
+          <AskButton question="What kind of problems do you work on?">Ask about my work</AskButton>
           <a
             href={profile.links.linkedin}
             target="_blank"
@@ -36,28 +33,22 @@ export default function WorkPage() {
       </PageIntro>
 
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <Reveal>
-          <dl className="grid grid-cols-2 gap-6 border-y border-rule py-8 md:grid-cols-4">
-            {work.highlights.map((h) => (
-              <div key={h.label}>
-                <dt className="sr-only">{h.label}</dt>
-                <dd>
-                  <span className="display block text-4xl text-accent sm:text-5xl">{h.value}</span>
-                  <span className="mt-1 block text-sm text-ink-2">{h.label}</span>
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </Reveal>
+        <ul className="flex flex-wrap gap-2 border-y border-rule py-6" aria-label="Focus areas">
+          {profile.focusAreas.map((f) => (
+            <li key={f} className="display rounded-full border border-rule bg-paper-2 px-4 py-1.5 text-lg">
+              {f}
+            </li>
+          ))}
+        </ul>
 
         <section aria-labelledby="exp" className="mt-20">
           <h2 id="exp" className="label mb-8">
             Experience
           </h2>
-          <ol className="space-y-16">
+          <ol className="space-y-12">
             {work.experience.map((e) => (
               <Reveal as="li" key={e.company}>
-                <article className="grid gap-6 md:grid-cols-[260px_1fr]">
+                <article className="grid gap-6 border-b border-rule pb-12 md:grid-cols-[260px_1fr]">
                   <header className="md:sticky md:top-24 md:self-start">
                     <h3 className="display text-4xl">{e.company}</h3>
                     <p className="mt-1 text-ink-2">{e.role}</p>
@@ -68,8 +59,14 @@ export default function WorkPage() {
                     </p>
                   </header>
                   <div>
-                    <p className="mb-5 text-lg">{e.summary}</p>
-                    <ProjectRows projects={e.projects} />
+                    <p className="text-lg">{e.summary}</p>
+                    <ul className="mt-4 flex flex-wrap gap-1.5" aria-label={`Things I worked on at ${e.company}`}>
+                      {e.projects.map((p) => (
+                        <li key={p.name} className="rounded-full border border-rule px-3 py-1 text-sm text-ink-2">
+                          {p.name}
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 </article>
               </Reveal>

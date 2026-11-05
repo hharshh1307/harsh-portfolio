@@ -11,13 +11,14 @@ import { cn } from "@/lib/utils";
 const SUGGESTIONS = [
   "What did you build at Zomato?",
   "What are you coding these days?",
-  "Best Barça match you've watched?",
+  "What are you listening to lately?",
   "Where have you travelled?",
 ];
 
 const TOOL_LABELS: Record<string, [busy: string, done: string]> = {
   getGitHubActivity: ["Checking GitHub…", "looked at GitHub"],
-  getNowPlaying: ["Checking Spotify…", "checked Spotify"],
+  getMusic: ["Checking Spotify…", "checked Spotify"],
+  getValorantStats: ["Pulling Valorant stats…", "checked Valorant"],
   searchWeb: ["Searching the web…", "searched the web"],
 };
 
@@ -103,10 +104,16 @@ export function ChatPanel({ autoFocus = false, className }: { autoFocus?: boolea
 
   const errorText = (() => {
     if (!error) return null;
-    const msg = error.message ?? "";
-    if (msg.includes("Too many")) return "You're sending messages fast. Give it a minute.";
-    if (msg.includes("not configured")) return "Chat isn't switched on right now.";
-    return "Something went wrong. Try again?";
+    // Non-2xx responses arrive as the raw body ({"error": "..."}); stream errors as plain text.
+    let msg = error.message ?? "";
+    try {
+      const parsed = JSON.parse(msg) as { error?: string };
+      if (parsed.error) msg = parsed.error;
+    } catch {
+      // not JSON
+    }
+    if (!msg || msg.length > 200 || msg.startsWith("<")) return "Something went wrong. Try again?";
+    return msg;
   })();
 
   return (

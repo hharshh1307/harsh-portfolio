@@ -30,6 +30,8 @@ export const profileSchema = z.object({
   location: z.string(),
   currentRole: z.string(),
   currentCompany: z.string(),
+  summary: z.string().describe("One or two plain sentences under the home headline"),
+  focusAreas: z.array(z.string()).min(1).describe("What you work on, as short keywords"),
   intro: z.array(z.string()).min(1).describe("Short paragraphs about you, first person"),
   links: z.object({
     github: z.url(),

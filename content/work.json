@@ -6,7 +6,7 @@
       "location": "Bengaluru, India",
       "start": "2024-09",
       "end": null,
-      "summary": "Ranking, recommendations and risk models for a fashion e-commerce app with ~200K daily active users.",
+      "summary": "Recommendation systems, demand forecasting and fraud detection for a fashion app.",
       "projects": [
         {
           "name": "Shop page ranking",
@@ -34,7 +34,7 @@
       "location": "Gurugram, India",
       "start": "2022-06",
       "end": "2024-08",
-      "summary": "Recommendations, churn and growth models for Zomato's dining business.",
+      "summary": "Recommendations, churn and growth models for the dining side of the app.",
       "projects": [
         {
           "name": "Dining homepage recommendations",
@@ -64,7 +64,7 @@
       "location": "Remote",
       "start": "2021-05",
       "end": "2021-07",
-      "summary": "Automation for the video-based customer identification (VCIP) process.",
+      "summary": "Internship automating parts of video-based customer verification.",
       "projects": [
         {
           "name": "VCIP recon automation",
