@@ -1,0 +1,20 @@
+{
+  "name": "Harsh Agarwal",
+  "shortName": "Harsh",
+  "headline": "I build recommendation systems by day and argue about *Barça* by night.",
+  "location": "Bengaluru, India",
+  "currentRole": "Data Scientist",
+  "currentCompany": "Newme",
+  "intro": [
+    "I'm a data scientist at Newme in Bengaluru, working on ranking and recommendations. Before that I spent two years at Zomato building recommendation, churn and growth models for the dining business.",
+    "I studied Electrical Engineering at IIT Delhi.",
+    "Outside work: Barcelona, Valorant, coffee, and trips I keep promising to write up properly."
+  ],
+  "links": {
+    "github": "https://github.com/hharshh1307",
+    "linkedin": "https://www.linkedin.com/in/harsh-agarwal-7a072b19a/",
+    "twitter": "https://x.com/harshag76504161",
+    "email": "harshh1307@gmail.com"
+  },
+  "githubUsername": "hharshh1307"
+}

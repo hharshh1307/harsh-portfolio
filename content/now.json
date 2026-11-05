@@ -1,0 +1,11 @@
+{
+  "status": "Building ranking and recommendation systems at Newme.",
+  "updates": [
+    {
+      "date": "2026-11",
+      "text": "Rebuilt this website. It now updates from a Telegram bot on my phone.",
+      "tag": "project",
+      "link": "/projects"
+    }
+  ]
+}

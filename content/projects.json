@@ -1,0 +1,26 @@
+{
+  "featured": [
+    {
+      "slug": "pocketmind",
+      "name": "PocketMind",
+      "repo": "pocketmind",
+      "tagline": "An iOS app with five personal AI agents: reminders, image captions, a Hinge reply helper, a travel planner and 'should I play?'.",
+      "stack": ["SwiftUI", "Supabase Edge Functions", "TypeScript", "OpenAI"]
+    },
+    {
+      "slug": "stock-picker",
+      "name": "Stock Picker",
+      "repo": "stock-picker",
+      "tagline": "Nifty 500 discovery dashboard with data-driven stock buckets and a ReAct-style AI analyst (13 tools) you can chat with.",
+      "stack": ["Python", "FastAPI", "OpenAI", "ReAct agents"]
+    },
+    {
+      "slug": "this-site",
+      "name": "This website",
+      "repo": "harsh-portfolio",
+      "tagline": "Next.js site with a tool-calling AI that answers as me, kept current by a Telegram bot that commits content changes from my phone.",
+      "stack": ["Next.js", "TypeScript", "AI SDK", "Telegram Bot API"]
+    }
+  ],
+  "hiddenRepos": ["mywebsite", "mycv", "projects26"]
+}
