@@ -1,0 +1,103 @@
+{
+  "home": {
+    "place": "Bengaluru",
+    "coords": [
+      77.5946,
+      12.9716
+    ]
+  },
+  "trips": [
+    {
+      "slug": "gokarna",
+      "place": "Gokarna",
+      "country": "India",
+      "coords": [
+        74.3188,
+        14.5479
+      ],
+      "photos": [
+        {
+          "src": "/images/travel/gokarna-1.jpg",
+          "alt": "A fluffy cream cat on a red leash sitting on wet sand, waves behind",
+          "caption": "Gokarna beach vibes"
+        },
+        {
+          "src": "/images/travel/gokarna-2.jpg",
+          "alt": "Sunset over the sea at Gokarna",
+          "caption": "Gokarna sunset"
+        }
+      ]
+    },
+    {
+      "slug": "thailand",
+      "place": "Thailand",
+      "country": "Thailand",
+      "coords": [
+        98.7784,
+        7.7407
+      ],
+      "photos": [
+        {
+          "src": "/images/travel/thailand-1.jpg",
+          "alt": "Long-tail boats moored in turquoise water below a jungle-covered limestone cliff"
+        },
+        {
+          "src": "/images/travel/thailand-2.jpg",
+          "alt": "Thailand trip photo"
+        }
+      ]
+    },
+    {
+      "slug": "varkala",
+      "place": "Varkala",
+      "country": "India",
+      "coords": [
+        76.7163,
+        8.7379
+      ],
+      "photos": [
+        {
+          "src": "/images/travel/varkala-1.jpg",
+          "alt": "Sun setting low over a quiet beach at Varkala",
+          "caption": "Varkala sunset"
+        }
+      ]
+    },
+    {
+      "slug": "ooty",
+      "place": "Ooty",
+      "country": "India",
+      "coords": [
+        76.695,
+        11.4102
+      ],
+      "photos": [
+        {
+          "src": "/images/travel/ooty-1.jpg",
+          "alt": "Two people standing on a terrace with the Nilgiri hills behind",
+          "caption": "Ooty"
+        },
+        {
+          "src": "/images/travel/misc-1.jpg",
+          "alt": "Overcast view across the hillside town of Ooty and tea terraces"
+        }
+      ]
+    }
+  ],
+  "wishlist": [
+    {
+      "place": "Barcelona",
+      "coords": [
+        2.1734,
+        41.3851
+      ],
+      "why": "A match at the Camp Nou."
+    }
+  ],
+  "unplacedPhotos": [
+    {
+      "src": "/images/travel/misc-2.jpg",
+      "alt": "Four friends on motorbikes and a scooter on a green countryside road"
+    }
+  ]
+}

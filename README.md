@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# harsh-portfolio
 
-## Getting Started
+Personal site: work, projects, travel, football, Valorant, coffee, and an AI that answers as me.
+Next.js 16 on Vercel. Content is updated from my phone through a Telegram bot.
 
-First, run the development server:
+## How it fits together
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```
+content/*.json ──► the website (validated at build time)
+      │
+      └────────► the chat agent's knowledge (/api/chat)
+
+Telegram ─► /api/bot/telegram ─► LLM drafts an edit ─► commit on branch bot/pending
+                                                        │  (Vercel builds a preview)
+                                    you tap Publish ────┘► merged into main ─► Vercel deploys
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **`content/`**: the only place personal info lives. Schemas in `src/lib/content/schema.ts`.
+  A bad edit fails the build, so it can't reach production.
+- **Chat agent** (`src/lib/agent/`): sees all of `content/` every turn, plus tools for live
+  GitHub activity, Spotify and web search.
+- **Telegram bot** (`src/lib/bot/`): you send plain text or a photo with a caption, it drafts
+  the change and shows a diff, and nothing goes live until you tap Publish. `/undo` reverts the last
+  published change.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Develop
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm install
+cp .env.example .env.local   # fill in what you need
+npm run dev                  # http://localhost:3000
+npm run build && npm run lint
+```
 
-## Learn More
+In dev, dashed **missing: …** chips show content that hasn't been written yet. They never
+render in production.
 
-To learn more about Next.js, take a look at the following resources:
+## Set up the Telegram bot (one time, ~10 minutes)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. In Telegram, message **@BotFather** → `/newbot` → copy the token.
+2. Create a GitHub **fine-grained token** for this repo only, with *Contents: Read and write*
+   and *Deployments: Read-only*.
+3. In Vercel → Settings → Environment Variables, add `TELEGRAM_BOT_TOKEN`,
+   `TELEGRAM_WEBHOOK_SECRET` (`openssl rand -hex 32`), `GITHUB_TOKEN`, `GITHUB_REPO`,
+   `SITE_URL`, `OPENAI_API_KEY`. Redeploy.
+4. Register the webhook:
+   `node --env-file=.env.local scripts/telegram-setup.mjs`
+5. Message your bot `/whoami`, put the number in `TELEGRAM_OWNER_ID` on Vercel, redeploy.
+   Only that account can change the site.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Then just talk to it: *"Went to Coorg in October, stayed on a coffee estate"*, or send a photo
+with the caption *"add to Gokarna"*. `/todo` lists what the site is still missing.
