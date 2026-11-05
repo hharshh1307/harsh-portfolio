@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { profile, work } from "@/lib/content";
-import { duration, formatMonth, formatRange } from "@/lib/format";
+import { duration, formatRange } from "@/lib/format";
 import { PageIntro } from "@/components/ui/Chapter";
 import { Reveal } from "@/components/ui/Reveal";
 import { AskButton } from "@/components/chat/AskButton";
@@ -74,44 +74,8 @@ export default function WorkPage() {
           </ol>
         </section>
 
-        <div className="mt-24 grid gap-16 md:grid-cols-2">
+        <div className="mt-24">
           <Reveal>
-            <section aria-labelledby="edu">
-              <h2 id="edu" className="label mb-6">
-                Education
-              </h2>
-              {work.education.map((ed) => (
-                <div key={ed.institution}>
-                  <p className="display text-3xl">{ed.institution}</p>
-                  <p className="mt-1 text-ink-2">{ed.degree}</p>
-                  <p className="mt-2 font-mono text-xs text-ink-3">
-                    {formatMonth(ed.start)} – {formatMonth(ed.end)}
-                    {ed.grade && ` · ${ed.grade}`}
-                  </p>
-                  {ed.courses && (
-                    <ul className="mt-4 space-y-1 text-ink-2">
-                      {ed.courses.map((c) => (
-                        <li key={c}>{c}</li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              ))}
-              <h2 className="label mb-4 mt-12">Achievements</h2>
-              <ul className="space-y-3">
-                {work.achievements.map((a) => (
-                  <li key={a.title} className="flex gap-4">
-                    {a.year && <span className="w-10 shrink-0 font-mono text-xs leading-6 text-ink-3">{a.year}</span>}
-                    <span>
-                      <span className="font-medium">{a.title}</span>
-                      <span className="text-ink-2"> · {a.detail}</span>
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </section>
-          </Reveal>
-          <Reveal delay={0.06}>
             <section aria-labelledby="skills">
               <h2 id="skills" className="label mb-6">
                 Toolbox

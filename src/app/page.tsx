@@ -1,8 +1,11 @@
 import Link from "next/link";
-import { ArrowRight, Coffee as CoffeeIcon, Crosshair, Trophy } from "lucide-react";
+import Image from "next/image";
+import { ArrowRight, Coffee as CoffeeIcon, Crosshair, Headphones, Trophy } from "lucide-react";
 import { coffee, football, now, profile, projects, travel, valorant, work } from "@/lib/content";
 import { getRepos } from "@/lib/github";
 import { getValorantLive } from "@/lib/valorant";
+import { getNowPlaying, getTopMusic } from "@/lib/spotify";
+import { NowPlaying } from "@/components/music/NowPlaying";
 import { buildTravelMap } from "@/lib/travel-map";
 import { formatMonth } from "@/lib/format";
 import { PhotoStack } from "@/components/home/PhotoStack";
@@ -29,7 +32,13 @@ const TAG_LABEL: Record<string, string> = {
 };
 
 export default async function Home() {
-  const [repos, valoLive] = await Promise.all([getRepos(profile.githubUsername), getValorantLive()]);
+  const [repos, valoLive, nowPlaying, topMusic] = await Promise.all([
+    getRepos(profile.githubUsername),
+    getValorantLive(),
+    getNowPlaying(),
+    getTopMusic("short_term"),
+  ]);
+  const onRepeat = (topMusic?.tracks ?? []).filter((t) => t.image).slice(0, 6);
   const repoByName = new Map(repos.map((r) => [r.name, r]));
   const map = buildTravelMap({ width: 1000, height: 560 });
 
@@ -140,7 +149,7 @@ export default async function Home() {
       {/* ---------- 02 Off the clock ---------- */}
       <section className="mx-auto max-w-6xl px-4 pt-24 sm:px-6" aria-labelledby="life-heading">
         <Reveal>
-          <Chapter n="02" kicker="Off the clock" id="life-heading" title="Football, Valorant, coffee" />
+          <Chapter n="02" kicker="Off the clock" id="life-heading" title="Football, Valorant, coffee, music" />
         </Reveal>
         <div className="grid gap-5 md:grid-cols-[1.4fr_1fr_1fr]">
           <Reveal className="h-full">
@@ -202,6 +211,45 @@ export default async function Home() {
             </Link>
           </Reveal>
         </div>
+
+        {(nowPlaying || onRepeat.length > 0) && (
+          <Reveal className="mt-5">
+            <div className="grid items-center gap-8 rounded-2xl border border-rule bg-paper-2 p-7 md:grid-cols-[1fr_1.3fr]">
+              <div>
+                <p className="label mb-5">
+                  <Headphones className="mr-1.5 inline size-3.5" aria-hidden />
+                  Music
+                </p>
+                <NowPlaying initial={nowPlaying} />
+              </div>
+              {onRepeat.length > 0 && (
+                <div>
+                  <div className="mb-3 flex items-baseline justify-between">
+                    <p className="label">On repeat this month</p>
+                    <Link href="/music" className="text-sm text-ink-2 underline-offset-4 hover:text-ink hover:underline">
+                      All of it →
+                    </Link>
+                  </div>
+                  <ul className="grid grid-cols-3 gap-3 sm:grid-cols-6">
+                    {onRepeat.map((t) => (
+                      <li key={t.url}>
+                        <a href={t.url} target="_blank" rel="noopener noreferrer" className="group block" title={`${t.title} · ${t.artist}`}>
+                          <Image
+                            src={t.image!}
+                            alt={`${t.title} by ${t.artist}`}
+                            width={120}
+                            height={120}
+                            className="aspect-square w-full rounded-md transition-transform group-hover:-translate-y-1"
+                          />
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </Reveal>
+        )}
       </section>
 
       {/* ---------- 03 Projects ---------- */}

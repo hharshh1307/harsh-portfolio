@@ -1,4 +1,5 @@
 import "server-only";
+import { unstable_cache } from "next/cache";
 
 export type NowPlaying = {
   isPlaying: boolean;
@@ -50,84 +51,117 @@ async function accessToken(): Promise<string | null> {
 }
 
 export type TimeRange = "short_term" | "medium_term" | "long_term";
+export type Track = { title: string; artist: string; album: string; image: string | null; url: string };
 export type TopMusic = {
   timeRange: TimeRange;
-  tracks: { title: string; artist: string; url: string }[];
-  artists: { name: string; genres: string[]; url: string }[];
+  tracks: Track[];
+  artists: { name: string; genres: string[]; image: string | null; url: string }[];
 };
+
+function toTrack(t: SpotifyTrack): Track {
+  return {
+    title: t.name,
+    artist: t.artists.map((a) => a.name).join(", "),
+    album: t.album.name,
+    // Spotify lists images largest first; the 300px one (index 1) is plenty for cards.
+    image: t.album.images[1]?.url ?? t.album.images[0]?.url ?? null,
+    url: t.external_urls.spotify,
+  };
+}
+
+async function spotifyGet<T>(path: string, token: string): Promise<T> {
+  const res = await fetch(`https://api.spotify.com/v1${path}`, {
+    headers: { Authorization: `Bearer ${token}` },
+    cache: "no-store",
+  });
+  if (!res.ok) throw new Error(`Spotify ${path} → ${res.status}`);
+  return (await res.json()) as T;
+}
+
+type SpotifyArtist = { name: string; genres?: string[]; images?: { url: string }[]; external_urls: { spotify: string } };
+
+async function fetchTopMusic(timeRange: TimeRange): Promise<TopMusic> {
+  const token = await accessToken();
+  if (!token) throw new Error("Spotify token refresh failed");
+  const [t, a] = await Promise.all([
+    spotifyGet<{ items: SpotifyTrack[] }>(`/me/top/tracks?limit=10&time_range=${timeRange}`, token),
+    spotifyGet<{ items: SpotifyArtist[] }>(`/me/top/artists?limit=8&time_range=${timeRange}`, token),
+  ]);
+  return {
+    timeRange,
+    tracks: t.items.map(toTrack),
+    artists: a.items.map((x) => ({
+      name: x.name,
+      genres: x.genres ?? [],
+      image: x.images?.[1]?.url ?? x.images?.[0]?.url ?? null,
+      url: x.external_urls.spotify,
+    })),
+  };
+}
 
 /**
  * Top tracks and artists (needs the user-top-read scope). short_term ≈ last 4 weeks,
- * medium_term ≈ 6 months, long_term ≈ all time. Cached for an hour.
+ * medium_term ≈ 6 months, long_term ≈ all time. Cached for an hour; failures aren't cached.
  */
 export async function getTopMusic(timeRange: TimeRange = "short_term"): Promise<TopMusic | null> {
   if (!spotifyConfigured()) return null;
   try {
-    const token = await accessToken();
-    if (!token) return null;
-    const auth = { Authorization: `Bearer ${token}` };
-    const [t, a] = await Promise.all([
-      fetch(`https://api.spotify.com/v1/me/top/tracks?limit=10&time_range=${timeRange}`, { headers: auth, next: { revalidate: 3600 } }),
-      fetch(`https://api.spotify.com/v1/me/top/artists?limit=8&time_range=${timeRange}`, { headers: auth, next: { revalidate: 3600 } }),
-    ]);
-    if (!t.ok && !a.ok) return null;
-    const tracks = t.ok ? ((await t.json()) as { items: SpotifyTrack[] }).items : [];
-    const artists = a.ok
-      ? ((await a.json()) as { items: { name: string; genres?: string[]; external_urls: { spotify: string } }[] }).items
-      : [];
-    return {
-      timeRange,
-      tracks: tracks.map((x) => ({ title: x.name, artist: x.artists.map((r) => r.name).join(", "), url: x.external_urls.spotify })),
-      artists: artists.map((x) => ({ name: x.name, genres: x.genres ?? [], url: x.external_urls.spotify })),
-    };
+    return await unstable_cache(fetchTopMusic, ["spotify-top"], { revalidate: 3600 })(timeRange);
   } catch {
     return null;
   }
 }
 
-/** Last few tracks played (needs user-read-recently-played). */
-export async function getRecentlyPlayed(limit = 10): Promise<{ title: string; artist: string; playedAt: string }[] | null> {
+export type RecentPlay = Track & { playedAt: string };
+
+async function fetchRecentlyPlayed(limit: number): Promise<RecentPlay[]> {
+  const token = await accessToken();
+  if (!token) throw new Error("Spotify token refresh failed");
+  const data = await spotifyGet<{ items: { track: SpotifyTrack; played_at: string }[] }>(
+    `/me/player/recently-played?limit=${limit}`,
+    token,
+  );
+  return data.items.map((i) => ({ ...toTrack(i.track), playedAt: i.played_at }));
+}
+
+/** Last few tracks played (needs user-read-recently-played). Cached for 5 minutes. */
+export async function getRecentlyPlayed(limit = 10): Promise<RecentPlay[] | null> {
   if (!spotifyConfigured()) return null;
   try {
-    const token = await accessToken();
-    if (!token) return null;
-    const res = await fetch(`https://api.spotify.com/v1/me/player/recently-played?limit=${limit}`, {
-      headers: { Authorization: `Bearer ${token}` },
-      cache: "no-store",
-    });
-    if (!res.ok) return null;
-    const data = (await res.json()) as { items: { track: SpotifyTrack; played_at: string }[] };
-    return data.items.map((i) => ({
-      title: i.track.name,
-      artist: i.track.artists.map((a) => a.name).join(", "),
-      playedAt: i.played_at,
-    }));
+    return await unstable_cache(fetchRecentlyPlayed, ["spotify-recent"], { revalidate: 300 })(limit);
   } catch {
     return null;
   }
 }
 
-/** Returns the current or last played track, or null if Spotify isn't configured or fails. */
+async function fetchNowPlaying(): Promise<NowPlaying | null> {
+  const token = await accessToken();
+  if (!token) throw new Error("Spotify token refresh failed");
+  const auth = { Authorization: `Bearer ${token}` };
+
+  const now = await fetch(NOW_PLAYING, { headers: auth, cache: "no-store" });
+  if (now.status === 200) {
+    const song = (await now.json()) as { is_playing: boolean; item: SpotifyTrack | null };
+    if (song.item) return toNowPlaying(song.item, song.is_playing);
+  }
+
+  const recent = await fetch(RECENTLY_PLAYED, { headers: auth, cache: "no-store" });
+  if (recent.status === 200) {
+    const data = (await recent.json()) as { items: { track: SpotifyTrack }[] };
+    const track = data.items[0]?.track;
+    if (track) return toNowPlaying(track, false);
+  }
+  return null;
+}
+
+/**
+ * Current or last played track, or null if Spotify isn't configured or fails. Cached for a
+ * minute so pages stay static (ISR); the NowPlaying component refreshes itself client-side.
+ */
 export async function getNowPlaying(): Promise<NowPlaying | null> {
   if (!spotifyConfigured()) return null;
   try {
-    const access_token = await accessToken();
-    if (!access_token) return null;
-    const auth = { Authorization: `Bearer ${access_token}` };
-
-    const now = await fetch(NOW_PLAYING, { headers: auth, cache: "no-store" });
-    if (now.status === 200) {
-      const song = (await now.json()) as { is_playing: boolean; item: SpotifyTrack | null };
-      if (song.item) return toNowPlaying(song.item, song.is_playing);
-    }
-
-    const recent = await fetch(RECENTLY_PLAYED, { headers: auth, cache: "no-store" });
-    if (recent.status === 200) {
-      const data = (await recent.json()) as { items: { track: SpotifyTrack }[] };
-      const track = data.items[0]?.track;
-      if (track) return toNowPlaying(track, false);
-    }
-    return null;
+    return await unstable_cache(fetchNowPlaying, ["spotify-now"], { revalidate: 60 })();
   } catch {
     return null;
   }

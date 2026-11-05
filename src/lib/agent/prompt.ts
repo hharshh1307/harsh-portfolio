@@ -42,7 +42,7 @@ function serialize(c: SiteContent): string {
   );
 }
 
-const PAGES = `/ (home), /work, /projects, /travel, /travel/<slug>, /football, /valorant, /coffee, /ask`;
+const PAGES = `/ (home), /work, /projects, /travel, /travel/<slug>, /football, /valorant, /coffee, /music, /ask`;
 
 export function buildSystemPrompt(): string {
   const today = new Date().toISOString().slice(0, 10);

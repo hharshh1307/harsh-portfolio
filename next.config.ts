@@ -3,6 +3,8 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   images: {
     formats: ["image/avif", "image/webp"],
+    // Spotify album art and artist photos.
+    remotePatterns: [{ protocol: "https", hostname: "i.scdn.co" }],
   },
   async redirects() {
     return [
