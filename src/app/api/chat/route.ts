@@ -1,5 +1,5 @@
 import { openai } from "@ai-sdk/openai";
-import { convertToModelMessages, safeValidateUIMessages, stepCountIs, streamText, type UIMessage } from "ai";
+import { APICallError, RetryError, convertToModelMessages, safeValidateUIMessages, stepCountIs, streamText, type UIMessage } from "ai";
 import { buildSystemPrompt } from "@/lib/agent/prompt";
 import { agentTools } from "@/lib/agent/tools";
 import { rateLimit } from "@/lib/rate-limit";
@@ -11,6 +11,20 @@ const MAX_CHARS_PER_MESSAGE = 2000;
 
 function textLength(m: UIMessage): number {
   return m.parts.reduce((n, p) => n + (p.type === "text" ? p.text.length : 0), 0);
+}
+
+/**
+ * Tell the visitor (and the site owner) *why* chat failed, without leaking provider details.
+ * The full error still goes to the server logs via onError above.
+ */
+function describeError(error: unknown): string {
+  const e = RetryError.isInstance(error) ? error.lastError : error;
+  if (APICallError.isInstance(e)) {
+    if (e.statusCode === 401) return "Chat is misconfigured: the OpenAI API key is invalid.";
+    if (e.statusCode === 429) return "The AI is out of quota or rate-limited right now. Try again later.";
+    if (e.statusCode === 404) return "Chat is misconfigured: the AI model isn't available on this account.";
+  }
+  return "Something went wrong on my side. Try again?";
 }
 
 export async function POST(req: Request) {
@@ -58,7 +72,5 @@ export async function POST(req: Request) {
     onError: ({ error }) => console.error("chat stream error", error),
   });
 
-  return result.toUIMessageStreamResponse({
-    onError: () => "Something went wrong on my side. Try again?",
-  });
+  return result.toUIMessageStreamResponse({ onError: describeError });
 }

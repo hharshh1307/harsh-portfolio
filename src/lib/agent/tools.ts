@@ -3,7 +3,8 @@ import { tool } from "ai";
 import { z } from "zod";
 import { tavily } from "@tavily/core";
 import { getRecentCommits, getRepos } from "@/lib/github";
-import { getNowPlaying } from "@/lib/spotify";
+import { getNowPlaying, getRecentlyPlayed, getTopMusic } from "@/lib/spotify";
+import { getValorantLive } from "@/lib/valorant";
 import { content } from "@/lib/content";
 
 const hidden = new Set(content.projects.hiddenRepos);
@@ -34,10 +35,24 @@ export const agentTools = {
     },
   }),
 
-  getNowPlaying: tool({
-    description: "What is playing on Spotify right now (or the last track played).",
+  getMusic: tool({
+    description:
+      "Spotify listening data. view='now' = playing right now; 'recent' = last tracks played; 'top' = most played tracks and artists for a period. Use 'top' for taste questions and for recommending music (recommend from these, don't invent).",
+    inputSchema: z.object({
+      view: z.enum(["now", "recent", "top"]),
+      period: z.enum(["short_term", "medium_term", "long_term"]).default("short_term").describe("For 'top': ~4 weeks, ~6 months, all time"),
+    }),
+    execute: async ({ view, period }) => {
+      const data =
+        view === "now" ? await getNowPlaying() : view === "recent" ? await getRecentlyPlayed(10) : await getTopMusic(period);
+      return data ?? { unavailable: true };
+    },
+  }),
+
+  getValorantStats: tool({
+    description: "Live Valorant stats: current rank and RR, peak rank, last 10 matches (map, agent, K/D/A, result), most played agents.",
     inputSchema: z.object({}),
-    execute: async () => (await getNowPlaying()) ?? { unavailable: true },
+    execute: async () => (await getValorantLive()) ?? { unavailable: true },
   }),
 
   searchWeb: tool({

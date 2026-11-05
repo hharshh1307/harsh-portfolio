@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { valorant } from "@/lib/content";
+import { getValorantLive } from "@/lib/valorant";
+import { timeAgo } from "@/lib/format";
 import { Missing } from "@/components/ui/Missing";
 import { Reveal } from "@/components/ui/Reveal";
 import { CopyButton } from "@/components/ui/CopyButton";
@@ -22,8 +24,18 @@ function Stat({ label, value, field }: { label: string; value?: string; field: s
   );
 }
 
-export default function ValorantPage() {
-  const v = valorant;
+export const revalidate = 600;
+
+export default async function ValorantPage() {
+  const live = await getValorantLive();
+  const v = {
+    ...valorant,
+    rank: live?.rank ? `${live.rank}${live.rr !== null ? ` · ${live.rr} RR` : ""}` : valorant.rank,
+    peakRank: live?.peakRank ?? valorant.peakRank,
+    agents: valorant.agents.length
+      ? valorant.agents
+      : (live?.topAgents ?? []).map((a) => ({ name: a.name, note: `${a.games} of last ${live?.recent.length} games` })),
+  };
   const hasAnything = Boolean(v.rank || v.role || v.agents.length || v.favouriteMap || v.crosshairCode || v.note);
 
   return (
@@ -144,6 +156,42 @@ export default function ValorantPage() {
             )}
           </section>
         </div>
+
+        {live && live.recent.length > 0 && (
+          <section aria-labelledby="recent" className="mt-16">
+            <div className="flex items-baseline justify-between">
+              <h2 id="recent" className="font-mono text-xs uppercase tracking-[0.3em] text-[#8b978f]">
+                Last {live.recent.length} games
+              </h2>
+              <p className="font-mono text-xs text-[#8b978f]">
+                {live.record.wins}W · {live.record.losses}L · live from {live.riotId.split("#")[0]}
+              </p>
+            </div>
+            <ol className="mt-4 divide-y divide-white/10 border-y border-white/10">
+              {live.recent.map((m, i) => (
+                <li key={`${m.startedAt}-${i}`} className="grid grid-cols-[auto_1fr_auto] items-baseline gap-4 py-3 sm:grid-cols-[auto_1fr_1fr_auto_auto]">
+                  <span
+                    className={
+                      m.won === true
+                        ? "w-6 font-mono text-sm font-bold text-[#3fd3a6]"
+                        : m.won === false
+                          ? "w-6 font-mono text-sm font-bold text-[#ff4655]"
+                          : "w-6 font-mono text-sm text-[#8b978f]"
+                    }
+                  >
+                    {m.won === true ? "W" : m.won === false ? "L" : "–"}
+                  </span>
+                  <span className="font-semibold uppercase tracking-wide">{m.map}</span>
+                  <span className="hidden text-[#c5c9c5] sm:block">{m.agent}</span>
+                  <span className="font-mono text-sm text-[#c5c9c5]">
+                    {m.kills}/{m.deaths}/{m.assists}
+                  </span>
+                  <span className="hidden font-mono text-xs text-[#8b978f] sm:block">{m.startedAt ? timeAgo(m.startedAt) : ""}</span>
+                </li>
+              ))}
+            </ol>
+          </section>
+        )}
 
         <div className="mt-16">
           <AskButton
