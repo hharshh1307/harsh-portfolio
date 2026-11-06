@@ -19,7 +19,20 @@
         "url": "https://www.youtube.com/watch?v=8xTLI9uOIGo",
         "by": "Ayush Pandey"
       },
-      "photos": []
+      "photos": [
+        {
+          "src": "/images/travel/arunachal-1.jpg",
+          "alt": "A high-altitude lake ringed by bare mountains under heavy clouds, people walking along the shore"
+        },
+        {
+          "src": "/images/travel/arunachal-2.jpg",
+          "alt": "A black-and-white yak grazing at the edge of a mountain lake"
+        },
+        {
+          "src": "/images/travel/arunachal-3.jpg",
+          "alt": "Six friends standing by a river with prayer flags on tall poles and pine-covered hills behind"
+        }
+      ]
     },
     {
       "slug": "vietnam",
@@ -30,7 +43,20 @@
         21.0285
       ],
       "video": {},
-      "photos": []
+      "photos": [
+        {
+          "src": "/images/travel/vietnam-1.jpg",
+          "alt": "Small boats with glowing paper lanterns on a river at night, lit-up buildings along the bank"
+        },
+        {
+          "src": "/images/travel/vietnam-2.jpg",
+          "alt": "A round basket boat on a calm, tree-lined river at dusk"
+        },
+        {
+          "src": "/images/travel/vietnam-3.jpg",
+          "alt": "Three friends at the bow of a boat on a green river between sheer limestone cliffs"
+        }
+      ]
     },
     {
       "slug": "gokarna",
