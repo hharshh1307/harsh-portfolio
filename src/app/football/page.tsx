@@ -11,32 +11,33 @@ import { AskButton } from "@/components/chat/AskButton";
 
 export const metadata: Metadata = {
   title: "Football",
-  description: "Barça, Messi, and takes I will defend.",
+  description: "Takes I will defend, and a few I probably shouldn't.",
 };
 
 export default async function FootballPage() {
   const [photo] = football.photo ? await withSizes([football.photo]) : [];
+  const publicOpinions = football.opinions.filter((o) => !o.agentOnly);
 
   return (
     <>
-      <header className="relative overflow-hidden bg-[#a50044] text-[#fbf3e6]">
+      <header className="relative overflow-hidden bg-[#1f4d36] text-[#fbf3e6]">
+        {/* Mown-pitch stripes. */}
         <div
-          className="pointer-events-none absolute inset-y-0 right-0 hidden w-1/2 md:block"
-          style={{ background: "repeating-linear-gradient(90deg, #004d98 0 56px, #a50044 56px 112px)", opacity: 0.55 }}
+          className="pointer-events-none absolute inset-0"
+          style={{ background: "repeating-linear-gradient(90deg, #ffffff0a 0 64px, transparent 64px 128px)" }}
           aria-hidden
         />
         <div className="relative mx-auto grid max-w-6xl gap-10 px-4 py-16 sm:px-6 md:grid-cols-[1.2fr_1fr] md:py-24">
           <div>
-            <p className="label mb-4 !text-[#f3dcc8]">Football</p>
+            <p className="label mb-4 !text-[#d9e8dc]">Football</p>
             <h1 className="display text-6xl leading-[0.95] sm:text-8xl">
-              Més que <span className="italic">un club.</span>
+              Strong <span className="italic">opinions.</span>
             </h1>
-            <p className="mt-6 max-w-md text-lg text-[#f3dcc8]">
-              {football.club}. {football.idol} is the GOAT and I&apos;m not taking questions on that, but the AI below
-              will.
+            <p className="mt-6 max-w-md text-lg text-[#d9e8dc]">
+              Weakly held, mostly. Vote on the takes below, or argue with my AI. It knows which club I support.
             </p>
             {football.since ? (
-              <p className="mt-3 max-w-md text-[#f3dcc8]">{football.since}</p>
+              <p className="mt-3 max-w-md text-[#d9e8dc]">{football.since}</p>
             ) : (
               <p className="mt-3">
                 <Missing what="football.since" />
@@ -58,7 +59,7 @@ export default async function FootballPage() {
                   <Image src={photo.src} alt={photo.alt} fill sizes="320px" className="object-cover object-top" priority />
                 </div>
                 <figcaption className="absolute inset-x-0 bottom-3 text-center font-display text-lg italic text-[#2a241d]">
-                  {football.idol}
+                  {photo.caption ?? "The GOAT"}
                 </figcaption>
               </figure>
             </Reveal>
@@ -74,12 +75,12 @@ export default async function FootballPage() {
           <TakesVote takes={football.takes} />
         </section>
 
-        {football.opinions.length > 0 && (
+        {publicOpinions.length > 0 && (
           <section aria-labelledby="opinions" className="pt-24">
             <Reveal>
               <Chapter n="02" kicker="Opinions" id="opinions" title="Pick a topic" />
             </Reveal>
-            <OpinionPicker opinions={football.opinions} />
+            <OpinionPicker opinions={publicOpinions} />
           </section>
         )}
 

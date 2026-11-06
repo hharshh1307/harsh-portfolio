@@ -107,6 +107,12 @@ export const travelSchema = z.object({
       summary: z.string().optional().describe("One or two sentences"),
       story: z.array(z.string()).optional().describe("Longer write-up paragraphs"),
       highlights: z.array(z.string()).optional(),
+      video: z
+        .object({
+          url: z.url().optional().describe("YouTube link. Leave out while the video is still being edited"),
+          by: z.string().optional().describe("Who shot/edited it, if not you"),
+        })
+        .optional(),
       photos: z.array(photo),
     }),
   ),
@@ -117,13 +123,21 @@ export const travelSchema = z.object({
 });
 
 export const footballSchema = z.object({
-  club: z.string(),
-  idol: z.string(),
-  since: z.string().optional().describe("When/how you started following the club"),
-  takes: z.array(z.object({ take: z.string(), spicy: z.boolean().default(false) })),
+  // Club loyalty is deliberately agent-only: the site talks about football in general, and the
+  // chat agent brings the club up when football comes up.
+  club: z.string().describe("Agent only, never shown on the site"),
+  idol: z.string().describe("Agent only, never shown on the site"),
+  since: z.string().optional().describe("How you got into football (public)"),
+  takes: z.array(z.object({ take: z.string(), spicy: z.boolean().default(false) })).describe("Public; keep club-neutral"),
   opinions: z
-    .array(z.object({ topic: z.string(), opinion: z.string() }))
-    .describe("Longer opinions the chat agent can quote"),
+    .array(
+      z.object({
+        topic: z.string(),
+        opinion: z.string(),
+        agentOnly: z.boolean().default(false).describe("true = club-specific, only the chat agent uses it"),
+      }),
+    )
+    .describe("Opinions the chat agent can quote; public ones appear in the topic picker"),
   moments: z.array(z.object({ year: z.number().int(), title: z.string(), why: z.string() })),
   stadiumBucketList: z.array(z.string()).optional(),
   photo: photo.optional(),

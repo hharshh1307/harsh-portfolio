@@ -8,6 +8,31 @@
   },
   "trips": [
     {
+      "slug": "arunachal",
+      "place": "Arunachal",
+      "country": "India",
+      "coords": [
+        91.8594,
+        27.586
+      ],
+      "video": {
+        "url": "https://www.youtube.com/watch?v=8xTLI9uOIGo",
+        "by": "Ayush Pandey"
+      },
+      "photos": []
+    },
+    {
+      "slug": "vietnam",
+      "place": "Vietnam",
+      "country": "Vietnam",
+      "coords": [
+        105.8542,
+        21.0285
+      ],
+      "video": {},
+      "photos": []
+    },
+    {
       "slug": "gokarna",
       "place": "Gokarna",
       "country": "India",

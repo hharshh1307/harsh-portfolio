@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import { TripVideo } from "@/components/travel/TripVideo";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight } from "lucide-react";
@@ -90,6 +91,12 @@ export default async function TripPage({ params }: Params) {
       </header>
 
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        {trip.video && (
+          <section aria-label="Trip video" className={cover ? "border-t border-rule py-12" : "pb-12"}>
+            <TripVideo url={trip.video.url} by={trip.video.by} place={trip.place} />
+          </section>
+        )}
+
         {(trip.story?.length || trip.highlights?.length) && (
           <div className="grid gap-12 border-t border-rule py-12 md:grid-cols-[1.5fr_1fr]">
             {trip.story?.length ? (

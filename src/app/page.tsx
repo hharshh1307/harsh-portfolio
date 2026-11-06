@@ -153,11 +153,11 @@ export default async function Home() {
         </Reveal>
         <div className="grid gap-5 md:grid-cols-[1.4fr_1fr_1fr]">
           <Reveal className="h-full">
-            <div className="flex h-full flex-col rounded-2xl bg-[#a50044] p-7 text-[#fbf3e6] [--ink-2:#f3dcc8] [--ink:#fbf3e6] [--accent:#ffd36e] [--accent-soft:#ffd36e33]">
+            <div className="flex h-full flex-col rounded-2xl bg-[#1f4d36] p-7 text-[#fbf3e6] [--ink-2:#d9e8dc] [--ink:#fbf3e6] [--accent:#ffd36e] [--accent-soft:#ffd36e33]">
               <div className="flex items-center justify-between">
-                <p className="label !text-[#f3dcc8]">
+                <p className="label !text-[#d9e8dc]">
                   <Trophy className="mr-1.5 inline size-3.5" aria-hidden />
-                  {football.club}
+                  Football
                 </p>
                 <Link href="/football" className="text-sm underline-offset-4 hover:underline">
                   More takes →

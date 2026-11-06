@@ -17,7 +17,7 @@ export function findMissing(c: SiteContent): MissingItem[] {
   if (c.travel.unplacedPhotos.length)
     add("travel", "unplacedPhotos", `${c.travel.unplacedPhotos.length} photo(s) not linked to a trip yet`);
 
-  if (!c.football.since) add("football", "since", "How and when you started supporting Barça");
+  if (!c.football.since) add("football", "since", "How you got into football");
 
   const v = c.valorant;
   if (!v.rank) add("valorant", "rank", "Current rank");
