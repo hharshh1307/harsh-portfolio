@@ -74,38 +74,6 @@
       ]
     }
   ],
-  "education": [
-    {
-      "institution": "IIT Delhi",
-      "degree": "B.Tech, Electrical Engineering",
-      "start": "2018-07",
-      "end": "2022-06",
-      "grade": "8.33 / 10",
-      "courses": [
-        "Machine Intelligence and Learning",
-        "Data Structures and Algorithms",
-        "Probability and Stochastic Processes",
-        "Digital Signal Processing"
-      ]
-    }
-  ],
-  "achievements": [
-    {
-      "title": "JEE Advanced",
-      "detail": "All India Rank 304 of ~155K candidates",
-      "year": 2018
-    },
-    {
-      "title": "KVPY Fellowship",
-      "detail": "All India Rank 973",
-      "year": 2018
-    },
-    {
-      "title": "IIT Delhi semester merit award",
-      "detail": "Top 7% of students, first semester",
-      "year": 2018
-    }
-  ],
   "skills": [
     {
       "group": "Modelling",
@@ -143,24 +111,6 @@
         "Docker",
         "Git"
       ]
-    }
-  ],
-  "highlights": [
-    {
-      "value": "+7%",
-      "label": "conversion from the Newme shop ranker"
-    },
-    {
-      "value": "+50%",
-      "label": "CTR on similar products"
-    },
-    {
-      "value": "7L+",
-      "label": "daily users on the Zomato dining recommender"
-    },
-    {
-      "value": "304",
-      "label": "JEE Advanced all-India rank"
     }
   ]
 }

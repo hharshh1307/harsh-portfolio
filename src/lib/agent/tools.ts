@@ -43,9 +43,22 @@ export const agentTools = {
       period: z.enum(["short_term", "medium_term", "long_term"]).default("short_term").describe("For 'top': ~4 weeks, ~6 months, all time"),
     }),
     execute: async ({ view, period }) => {
-      const data =
-        view === "now" ? await getNowPlaying() : view === "recent" ? await getRecentlyPlayed(10) : await getTopMusic(period);
-      return data ?? { unavailable: true };
+      if (view === "now") {
+        const t = await getNowPlaying();
+        return t ? { isPlaying: t.isPlaying, title: t.title, artist: t.artist, url: t.songUrl } : { unavailable: true };
+      }
+      if (view === "recent") {
+        const r = await getRecentlyPlayed(10);
+        return r ? r.map(({ title, artist, playedAt }) => ({ title, artist, playedAt })) : { unavailable: true };
+      }
+      const top = await getTopMusic(period);
+      if (!top) return { unavailable: true };
+      // Image URLs are noise for the model; keep titles, artists and links.
+      return {
+        period,
+        tracks: top.tracks.map(({ title, artist, url }) => ({ title, artist, url })),
+        artists: top.artists.map(({ name, genres }) => (genres.length ? { name, genres } : { name })),
+      };
     },
   }),
 

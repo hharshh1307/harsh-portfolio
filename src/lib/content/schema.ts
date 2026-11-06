@@ -76,23 +76,7 @@ export const workSchema = z.object({
       projects: z.array(workProject),
     }),
   ),
-  education: z.array(
-    z.object({
-      institution: z.string(),
-      degree: z.string(),
-      start: isoDate,
-      end: isoDate,
-      grade: z.string().optional(),
-      courses: z.array(z.string()).optional(),
-    }),
-  ),
-  achievements: z.array(
-    z.object({ title: z.string(), detail: z.string(), year: z.number().int().optional() }),
-  ),
   skills: z.array(z.object({ group: z.string(), items: z.array(z.string()).min(1) })),
-  highlights: z
-    .array(z.object({ value: z.string(), label: z.string() }))
-    .describe("Real, verifiable numbers only"),
 });
 
 export const projectsSchema = z.object({
