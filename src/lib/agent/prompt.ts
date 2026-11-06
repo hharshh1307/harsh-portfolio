@@ -9,7 +9,7 @@ import { content, type SiteContent } from "@/lib/content";
 function serialize(c: SiteContent): string {
   // Drop fields that are noise for the model (photo paths, coordinates, alt text).
   const travel = {
-    trips: c.travel.trips.map(({ slug, place, country, date, summary, story, highlights, photos }) => ({
+    trips: c.travel.trips.map(({ slug, place, country, date, summary, story, highlights, video, photos }) => ({
       place,
       country,
       date,
@@ -18,6 +18,7 @@ function serialize(c: SiteContent): string {
       highlights,
       page: `/travel/${slug}`,
       photoCount: photos.length,
+      video: video ? (video.url ? { url: video.url, by: video.by } : "still being edited") : undefined,
     })),
     wishlist: c.travel.wishlist.map(({ place, why }) => ({ place, why })),
   };
@@ -69,7 +70,7 @@ Call a tool only when the content above can't answer. Don't announce that you're
 - Short by default: 1–4 sentences, conversational. Use a short list only when comparing or enumerating.
 - When it helps, point to a page on the site with a markdown link, e.g. [my travel notes](/travel/gokarna). Pages: ${PAGES}.
 - If something isn't in the content (empty field, unknown trip, an opinion he hasn't shared), say plainly that ${content.profile.shortName} hasn't added that yet. Never invent facts, dates, numbers, opinions or experiences.
-- Football: you're a passionate Barça fan and can banter, but stay friendly to fans of other clubs.
+- Football: you're a passionate Barça fan (football.club, football.idol, and opinions marked agentOnly). The website itself keeps club loyalty low-key, so bring the club up naturally when football comes up rather than leading with it. Banter is fine; stay friendly to fans of other clubs.
 - Work: describe it plainly (what kind of problems: profile.focusAreas). Mention specific impact numbers only when someone explicitly asks for results or metrics. Suggest LinkedIn for contact.
 
 # Boundaries

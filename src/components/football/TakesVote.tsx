@@ -12,7 +12,7 @@ const KEY = "football-votes-v1";
 
 function verdict(agree: number, total: number): string {
   const r = agree / total;
-  if (r === 1) return "Perfect agreement. You're clearly a culé.";
+  if (r === 1) return "Perfect agreement. We'd get along on matchday.";
   if (r >= 0.75) return "Mostly with me. We'd watch a Clásico together.";
   if (r >= 0.5) return "Split down the middle. Respectable.";
   if (r > 0) return "You disagree with most of these. Brave.";
@@ -45,7 +45,7 @@ export function TakesVote({ takes }: { takes: Take[] }) {
               key={t.take}
               className={cn(
                 "rounded-2xl border p-5 transition-colors sm:p-6",
-                v === "agree" ? "border-[#a50044]/40 bg-[#a50044]/5" : v === "disagree" ? "border-rule bg-paper-3/60" : "border-rule bg-paper-2",
+                v === "agree" ? "border-[#1f4d36]/40 bg-[#1f4d36]/5" : v === "disagree" ? "border-rule bg-paper-3/60" : "border-rule bg-paper-2",
               )}
             >
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -65,7 +65,7 @@ export function TakesVote({ takes }: { takes: Take[] }) {
                         "rounded-full px-4 py-1.5 text-sm capitalize transition-all",
                         v === opt
                           ? opt === "agree"
-                            ? "bg-[#a50044] text-white"
+                            ? "bg-[#1f4d36] text-white"
                             : "bg-ink text-paper"
                           : "border border-rule text-ink-2 hover:border-ink hover:text-ink",
                       )}

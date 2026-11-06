@@ -1,11 +1,11 @@
 {
   "name": "Harsh Agarwal",
   "shortName": "Harsh",
-  "headline": "I build recommendation systems by day and argue about *Barça* by night.",
+  "headline": "Data by day. *Elsewhere* by weekend.",
   "location": "Bengaluru, India",
   "currentRole": "Data Scientist",
   "currentCompany": "Newme",
-  "summary": "Data scientist in Bengaluru. Off the clock it's Barça, Valorant, coffee and the next trip.",
+  "summary": "Data scientist in Bengaluru. The rest of the time: football, Valorant, coffee, and somewhere new.",
   "focusAreas": [
     "Recommendation systems",
     "Demand forecasting",
@@ -13,7 +13,7 @@
   ],
   "intro": [
     "I'm a data scientist at Newme in Bengaluru. Before that I was at Zomato for two years.",
-    "Outside work: Barcelona, Valorant, coffee, and trips I keep promising to write up properly."
+    "Outside work: football, Valorant, coffee, and trips I keep promising to write up properly."
   ],
   "links": {
     "github": "https://github.com/hharshh1307",
