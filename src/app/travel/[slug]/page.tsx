@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { TripVideo } from "@/components/travel/TripVideo";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, Clapperboard, Play } from "lucide-react";
 import { travel } from "@/lib/content";
 import { withSizes } from "@/lib/images";
 import { formatMonth } from "@/lib/format";
@@ -62,6 +61,26 @@ export default async function TripPage({ params }: Params) {
               <Missing what={`travel.${trip.slug}.summary`} />
             </p>
           )}
+          {trip.video &&
+            (trip.video.url ? (
+              <p className="mt-6">
+                <a
+                  href={trip.video.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex items-center gap-2 rounded-full border border-rule px-4 py-2 text-sm transition-colors hover:border-ink"
+                >
+                  <Play className="size-3.5 fill-current" aria-hidden />
+                  Watch the trip video
+                  <span className="text-ink-3 group-hover:text-ink-2">on YouTube ↗</span>
+                </a>
+                {trip.video.by && <span className="mt-2 block text-sm text-ink-3">Shot and edited by {trip.video.by}</span>}
+              </p>
+            ) : (
+              <p className="mt-6 inline-flex items-center gap-2 text-sm text-ink-3">
+                <Clapperboard className="size-4" aria-hidden /> Trip video is still in the edit.
+              </p>
+            ))}
           {!trip.date && (
             <p className="mt-2">
               <Missing what={`travel.${trip.slug}.date`} />
@@ -91,12 +110,6 @@ export default async function TripPage({ params }: Params) {
       </header>
 
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        {trip.video && (
-          <section aria-label="Trip video" className={cover ? "border-t border-rule py-12" : "pb-12"}>
-            <TripVideo url={trip.video.url} by={trip.video.by} place={trip.place} />
-          </section>
-        )}
-
         {(trip.story?.length || trip.highlights?.length) && (
           <div className="grid gap-12 border-t border-rule py-12 md:grid-cols-[1.5fr_1fr]">
             {trip.story?.length ? (
