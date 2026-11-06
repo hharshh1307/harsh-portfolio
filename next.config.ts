@@ -5,7 +5,6 @@ const nextConfig: NextConfig = {
     formats: ["image/avif", "image/webp"],
     remotePatterns: [
       { protocol: "https", hostname: "i.scdn.co" }, // Spotify album art and artist photos
-      { protocol: "https", hostname: "i.ytimg.com" }, // YouTube thumbnails for trip videos
     ],
   },
   async redirects() {

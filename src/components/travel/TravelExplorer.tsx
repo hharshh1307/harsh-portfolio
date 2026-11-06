@@ -6,7 +6,6 @@ import Link from "next/link";
 import type { Trip } from "@/lib/content/schema";
 import { formatMonth } from "@/lib/format";
 import { cn } from "@/lib/utils";
-import { youtubeId, youtubeThumb } from "@/lib/youtube";
 import { TravelMap, type TravelMapProps } from "./TravelMap";
 
 type Props = Omit<TravelMapProps, "active" | "onActive"> & {
@@ -59,10 +58,9 @@ export function TravelExplorer({ trips, variant = "full", ...map }: Props) {
       <ul className="mt-12 grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
         {trips.map((t, i) => {
           const cover = t.photos[0];
-          const vid = t.video?.url ? youtubeId(t.video.url) : null;
           const badge = [
             t.photos.length ? `${t.photos.length} photo${t.photos.length === 1 ? "" : "s"}` : null,
-            t.video ? (vid ? "▶ video" : "video soon") : null,
+            t.video ? (t.video.url ? "▶ video" : "video soon") : null,
           ]
             .filter(Boolean)
             .join(" · ");
@@ -81,16 +79,13 @@ export function TravelExplorer({ trips, variant = "full", ...map }: Props) {
                 className="group block"
               >
                 <div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-paper-3">
-                  {(cover || vid) && (
+                  {cover && (
                     <Image
-                      src={cover ? cover.src : youtubeThumb(vid!)}
-                      alt={cover ? cover.alt : ""}
+                      src={cover.src}
+                      alt={cover.alt}
                       fill
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      className={cn(
-                        "object-cover transition-transform duration-700",
-                        cover ? "group-hover:scale-[1.04]" : "scale-[1.35] group-hover:scale-[1.4]",
-                      )}
+                      className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
                     />
                   )}
                   {badge && (
