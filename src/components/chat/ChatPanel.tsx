@@ -9,16 +9,18 @@ import { useChat } from "./ChatProvider";
 import { cn } from "@/lib/utils";
 
 const SUGGESTIONS = [
+  "What are you up to right now?",
   "What did you build at Zomato?",
-  "What are you coding these days?",
   "What are you listening to lately?",
-  "Where have you travelled?",
+  "Pass a message to Harsh",
 ];
 
 const TOOL_LABELS: Record<string, [busy: string, done: string]> = {
   getGitHubActivity: ["Checking GitHub…", "looked at GitHub"],
   getMusic: ["Checking Spotify…", "checked Spotify"],
   getValorantStats: ["Pulling Valorant stats…", "checked Valorant"],
+  getSnapshot: ["Checking the live feeds…", "checked the live feeds"],
+  leaveMessage: ["Passing that on…", "sent your message"],
   searchWeb: ["Searching the web…", "searched the web"],
 };
 

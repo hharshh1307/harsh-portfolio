@@ -37,14 +37,14 @@ export function NowPlaying({ initial, size = "md" }: { initial: Track | null; si
   }, []);
 
   if (!track) return null;
-  const art = size === "lg" ? 160 : 88;
+  const art = size === "lg" ? 128 : 80;
 
   return (
     <a
       href={track.songUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className="group flex items-center gap-5"
+      className="group flex min-w-0 items-center gap-4 sm:gap-5"
       aria-label={`${track.isPlaying ? "Now playing" : "Last played"}: ${track.title} by ${track.artist} (opens Spotify)`}
     >
       {track.albumImageUrl && (

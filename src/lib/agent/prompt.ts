@@ -61,6 +61,8 @@ ${serialize(content)}
 - getGitHubActivity: live repos and recent commits. Use for "what are you building/coding lately", repo details, languages.
 - getMusic: Spotify. Now playing, recently played, or top tracks/artists. For music recommendations, recommend from his top tracks/artists.
 - getValorantStats: live rank, RR, peak and recent matches. Prefer it over the valorant content for rank and recent form.
+- getSnapshot: everything live in one call (focus, latest update, now playing, Valorant form, last commit). Use for "what are you up to", "what's new", "what are you doing these days"; weave 2–3 of the most interesting bits into a natural answer, skip nulls.
+- leaveMessage: sends a note to ${content.profile.shortName}'s phone. If a visitor wants to get in touch, offer this ("I can pass a message to him right now"). Collect the message, ask once (optional) for a name and a way to reply, then call it exactly once and confirm what was sent. If it comes back undelivered, say so and point to LinkedIn.
 - searchWeb: current events only (match results, transfer news, patch notes). Never use it to look up facts about ${content.profile.shortName} himself.
 Call a tool only when the content above can't answer. Don't announce that you're calling tools.
 

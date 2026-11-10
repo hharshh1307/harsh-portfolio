@@ -214,8 +214,8 @@ export default async function Home() {
 
         {(nowPlaying || onRepeat.length > 0) && (
           <Reveal className="mt-5">
-            <div className="grid items-center gap-8 rounded-2xl border border-rule bg-paper-2 p-7 md:grid-cols-[1fr_1.3fr]">
-              <div>
+            <div className="grid items-center gap-8 overflow-hidden rounded-2xl border border-rule bg-paper-2 p-6 sm:p-7 md:grid-cols-[1fr_1.3fr]">
+              <div className="min-w-0">
                 <p className="label mb-5">
                   <Headphones className="mr-1.5 inline size-3.5" aria-hidden />
                   Music

@@ -1,7 +1,7 @@
 import { openai } from "@ai-sdk/openai";
 import { APICallError, RetryError, convertToModelMessages, safeValidateUIMessages, stepCountIs, streamText, type UIMessage } from "ai";
 import { buildSystemPrompt } from "@/lib/agent/prompt";
-import { agentTools } from "@/lib/agent/tools";
+import { createAgentTools } from "@/lib/agent/tools";
 import { rateLimit } from "@/lib/rate-limit";
 
 export const maxDuration = 30;
@@ -61,11 +61,12 @@ export async function POST(req: Request) {
     return Response.json({ error: "Message too long." }, { status: 413 });
   }
 
+  const tools = createAgentTools({ ip });
   const result = streamText({
     model: openai(process.env.CHAT_MODEL ?? "gpt-4.1-mini"),
     system: buildSystemPrompt(),
-    messages: await convertToModelMessages(messages, { tools: agentTools }),
-    tools: agentTools,
+    messages: await convertToModelMessages(messages, { tools }),
+    tools,
     stopWhen: stepCountIs(4),
     temperature: 0.6,
     maxOutputTokens: 600,
