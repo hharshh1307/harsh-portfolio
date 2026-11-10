@@ -1,3 +1,20 @@
 {
-  "agents": []
+  "role": "Flex",
+  "agents": [
+    {
+      "name": "Reyna",
+      "note": "When I want the game in my own hands."
+    },
+    {
+      "name": "Raze",
+      "note": "The other half of my duelist pool."
+    },
+    {
+      "name": "Cypher",
+      "note": "When the team needs someone holding the site."
+    }
+  ],
+  "favouriteMap": "Ascent",
+  "playsWith": "Mostly college friends.",
+  "note": "I move between duelist and sentinel depending on what the team is short of. Ranked with friends beats ranked alone, every time."
 }
