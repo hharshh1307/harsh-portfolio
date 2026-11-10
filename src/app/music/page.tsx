@@ -32,7 +32,7 @@ export default async function MusicPage() {
         </div>
         {now && (
           <Reveal>
-            <div className="rounded-2xl border border-rule bg-paper-2 p-6">
+            <div className="min-w-0 overflow-hidden rounded-2xl border border-rule bg-paper-2 p-5 sm:p-6">
               <NowPlaying initial={now} size="lg" />
             </div>
           </Reveal>

@@ -75,7 +75,7 @@ export default function CoffeePage() {
         </section>
         )}
 
-        {(c.brewMethod || c.homeSetup?.length || c.beans.length) && (
+        {Boolean(c.brewMethod || c.homeSetup?.length || c.beans.length) && (
           <section aria-labelledby="home-setup" className="grid gap-12 md:grid-cols-2">
             <div>
               <h2 id="home-setup" className="display mb-6 text-4xl">
