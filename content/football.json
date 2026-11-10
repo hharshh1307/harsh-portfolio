@@ -32,7 +32,7 @@
     },
     {
       "topic": "Barcelona",
-      "opinion": "More than a club. The philosophy of beautiful football, La Masia, and the tiki-taka era under Guardiola: that's football at its purest.",
+      "opinion": "Messi is the reason I started watching Barça, but the style is why I stayed. More than a club: La Masia, and the tiki-taka era under Guardiola. He left, the support didn't.",
       "agentOnly": true
     },
     {
@@ -52,7 +52,7 @@
     },
     {
       "topic": "Pedri",
-      "opinion": "One of the best midfielders in the world. His control and vision remind me of Iniesta.",
+      "opinion": "My favourite player at Barça right now. The control and the vision are ridiculous; he reminds me of Iniesta.",
       "agentOnly": false
     },
     {
@@ -69,6 +69,11 @@
       "topic": "Champions League",
       "opinion": "Barcelona need to rebuild and get back to winning it. The 2015 treble team was special.",
       "agentOnly": true
+    },
+    {
+      "topic": "Neymar",
+      "opinion": "His skill videos are what got me into football in the first place, so I'll always have a soft spot. Ridiculous talent.",
+      "agentOnly": false
     }
   ],
   "moments": [
@@ -94,5 +99,6 @@
   "photo": {
     "src": "/images/messi.jpg",
     "alt": "Lionel Messi"
-  }
+  },
+  "since": "I started watching in 2018, through Neymar skill compilations. Then I found Messi, and that was that. I've gone back and filled in the history since the late 2000s."
 }

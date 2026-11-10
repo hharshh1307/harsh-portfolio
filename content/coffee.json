@@ -1,4 +1,23 @@
 {
+  "usualOrder": "A cold cappuccino, or whichever americano variation the place does well.",
+  "brewMethod": "Instant coffee with condensed milk at home. I keep fiddling with it: a pinch of salt, sometimes vanilla.",
   "beans": [],
-  "cafes": []
+  "cafes": [
+    {
+      "name": "Casa Fresco",
+      "area": "Bengaluru",
+      "note": "Good cold cappuccino."
+    },
+    {
+      "name": "Coffea",
+      "area": "Bengaluru",
+      "note": "Worth it for the americano variations."
+    },
+    {
+      "name": "Third Wave",
+      "area": "Bengaluru",
+      "note": "The reliable one when I don't want to think about it."
+    }
+  ],
+  "note": "One or two cups a day. Vietnam spoiled me a bit: the coffee culture there is on another level."
 }

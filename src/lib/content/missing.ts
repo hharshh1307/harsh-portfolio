@@ -20,7 +20,6 @@ export function findMissing(c: SiteContent): MissingItem[] {
   if (!c.football.since) add("football", "since", "How you got into football");
 
   const v = c.valorant;
-  if (!v.rank) add("valorant", "rank", "Current rank");
   if (!v.role) add("valorant", "role", "Duelist / Initiator / Controller / Sentinel / Flex");
   if (!v.agents.length) add("valorant", "agents", "Your main agents");
   if (!v.favouriteMap) add("valorant", "favouriteMap", "Favourite map");

@@ -5,22 +5,44 @@
       "name": "PocketMind",
       "repo": "pocketmind",
       "tagline": "An iOS app with five personal AI agents: reminders, image captions, a Hinge reply helper, a travel planner and 'should I play?'.",
-      "stack": ["SwiftUI", "Supabase Edge Functions", "TypeScript", "OpenAI"]
+      "stack": [
+        "SwiftUI",
+        "Supabase Edge Functions",
+        "TypeScript",
+        "OpenAI"
+      ],
+      "story": "Four or five small agents for things I actually do every week: checking the Bengaluru weather before football, captioning a photo in something close to my own voice, setting reminders, drafting replies. The app works out which agent to spawn from whatever I ask it. Built it to learn how agent routing behaves on a device rather than in a notebook."
     },
     {
       "slug": "stock-picker",
       "name": "Stock Picker",
       "repo": "stock-picker",
       "tagline": "Nifty 500 discovery dashboard with data-driven stock buckets and a ReAct-style AI analyst (13 tools) you can chat with.",
-      "stack": ["Python", "FastAPI", "OpenAI", "ReAct agents"]
+      "stack": [
+        "Python",
+        "FastAPI",
+        "OpenAI",
+        "ReAct agents"
+      ],
+      "story": "It reads my real portfolio through the Groww API, then pulls market data and news on top of that to suggest sectors and stocks worth holding for the medium or long term. The interesting part was getting an agent to reason over live numbers without confidently making things up."
     },
     {
       "slug": "this-site",
       "name": "This website",
       "repo": "harsh-portfolio",
       "tagline": "Next.js site with a tool-calling AI that answers as me, kept current by a Telegram bot that commits content changes from my phone.",
-      "stack": ["Next.js", "TypeScript", "AI SDK", "Telegram Bot API"]
+      "stack": [
+        "Next.js",
+        "TypeScript",
+        "AI SDK",
+        "Telegram Bot API"
+      ],
+      "story": "Still being built. I wanted somewhere of my own to learn web development and AI engineering properly, instead of reading about them, and a single place where everything about me is laid out rather than scattered across profiles."
     }
   ],
-  "hiddenRepos": ["mywebsite", "mycv", "projects26"]
+  "hiddenRepos": [
+    "mywebsite",
+    "mycv",
+    "projects26"
+  ]
 }
